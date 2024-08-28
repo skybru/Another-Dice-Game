@@ -16,13 +16,24 @@ let rolls = 0;
 let score = 0;
 let round = 1;
 
+const updateStats = () => {
+    roundElement.textContent = round;
+    rollsElement.textContent = rolls;
+}
+
 rollDiceBtn.addEventListener("click", () => {
+    if (rolls >= 3) {
+        alert("Alredy rolled three times for this round. Choose a score!")
+        return;
+    }
+
+    rolls++;
     listOfAllDice.forEach((die, index) => {
         diceValuesArr[index] = Math.floor(Math.random() * 6) + 1;
         die.textContent = diceValuesArr[index];
     });
-
-       Array.from(listOfAllDice).sort((a, b) => a - b);
+    updateStats();
+       //Array.from(listOfAllDice).sort((a, b) => a - b); misinterpreted the quest
 });
 
 rulesBtn.addEventListener("click", () => {

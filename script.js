@@ -27,6 +27,23 @@ const updateRadioOption = (index, score) => {
     scoreSpans[index].textContent += `, score = ${score}`;
 };
 
+const resetRadioOptions = () => {
+    scoreInputs.forEach(input => {
+        input.disabled = true;
+        input.checked = false;
+    });
+
+    scoreSpans.forEach(span => {
+        span.textContent = "";
+    });
+};
+
+const updateScore = (value, id) => {
+    score += parseInt(value);
+    totalScore.textContent = score;
+    scoreHistory.innerHTML += `<li>${id} : ${value}</li>`;
+};
+
 const getHighestDuplicates = (numbers) => {
     const counter = {};
     numbers.forEach((item) => {
@@ -57,13 +74,28 @@ const getHighestDuplicates = (numbers) => {
     updateRadioOption(5, 0);
 };
 
+const resetGame = () => {
+    listOfAllDice.forEach(item => {
+        item.textContent = "0";
+    });
+    score = 0;
+    rolls = 0;
+    round = 1;
+    totalScore.textContent = score;
+    scoreHistory.innerHTML = "";
+    rollsElement.textContent = rolls;
+    roundElement.textContent = round;
+    resetRadioOptions();
+};
+
 rollDiceBtn.addEventListener("click", () => {
     if (rolls >= 3) {
         alert("Alredy rolled three times for this round. Choose a score!")
         return;
     }
-
+    resetRadioOptions(scoreInputs);
     rolls++;
+    //maybe refactor into a call function?
     listOfAllDice.forEach((die, index) => {
         diceValuesArr[index] = Math.floor(Math.random() * 6) + 1;
         die.textContent = diceValuesArr[index];
@@ -84,4 +116,34 @@ rulesBtn.addEventListener("click", () => {
         rulesContainer.style.display = "none";
         rulesBtn.textContent = "Show rules";
     }
+});
+
+keepScoreBtn.addEventListener("click", () => {
+
+    let valueSelected;
+    let radioId;
+
+    scoreInputs.forEach(item => {
+        if (item.checked) {
+            valueSelected = item.value;
+            radioId = item.id;
+        }
+    });
+
+    if (valueSelected) {
+        rolls = 0;
+        round++;
+        updateStats();
+        resetRadioOptions();
+        updateScore(valueSelected, radioId);
+        if (round > 6) {
+            setTimeout(() => {
+                alert("Game Over! Your final Score: " + score)
+                resetGame();
+            }, 500);
+        }
+    } else {
+        alert("Please, select a score option!")
+    }
+
 });

@@ -19,7 +19,18 @@ let round = 1;
 const updateStats = () => {
     roundElement.textContent = round;
     rollsElement.textContent = rolls;
-}
+};
+
+const updateRadioOption = (index, score) => {
+    scoreInputs[index].disabled = false;
+    scoreInputs[index].value = score;
+    scoreSpans[index].textContent += `, score = ${score}`;
+};
+
+const getHighestDuplicates = (numbers) => {
+
+    
+};
 
 rollDiceBtn.addEventListener("click", () => {
     if (rolls >= 3) {
@@ -33,7 +44,7 @@ rollDiceBtn.addEventListener("click", () => {
         die.textContent = diceValuesArr[index];
     });
     updateStats();
-       //Array.from(listOfAllDice).sort((a, b) => a - b); misinterpreted the quest
+    //Array.from(listOfAllDice).sort((a, b) => a - b); misinterpreted the quest
 });
 
 rulesBtn.addEventListener("click", () => {

@@ -28,8 +28,33 @@ const updateRadioOption = (index, score) => {
 };
 
 const getHighestDuplicates = (numbers) => {
+    const counter = {};
+    numbers.forEach((item) => {
+        counter[item] = (counter[item] || 0) + 1;
+    });
 
-    
+    let highestRepetition = 0;
+
+    numbers.forEach((item) => {
+        const count = counter[item];
+        if (count >= 3 && count > highestRepetition) {
+            highestRepetition = count;
+        }
+        if (count >= 4 && count > highestRepetition) {
+            highestRepetition = count;
+        }
+    });
+
+    const sumAllDice = numbers.reduce((a, b) => a + b, 0);
+
+    if (highestRepetition >= 4) {
+        updateRadioOption(1, sumAllDice);
+    }
+    if (highestRepetition >= 3) {
+        updateRadioOption(0, sumAllDice);
+    }
+
+    updateRadioOption(5, 0);
 };
 
 rollDiceBtn.addEventListener("click", () => {
@@ -44,6 +69,7 @@ rollDiceBtn.addEventListener("click", () => {
         die.textContent = diceValuesArr[index];
     });
     updateStats();
+    getHighestDuplicates(diceValuesArr);
     //Array.from(listOfAllDice).sort((a, b) => a - b); misinterpreted the quest
 });
 

@@ -74,6 +74,43 @@ const getHighestDuplicates = (numbers) => {
     updateRadioOption(5, 0);
 };
 
+const detectFullHouse = (numbers) => {
+    const counter = {};
+    numbers.forEach((item) => {
+        counter[item] = (counter[item] || 0) + 1;
+    });
+
+    const hasThreeOfAKind = Object.values(counter).includes(3);
+    const hasPair = Object.values(counter).includes(2);
+
+    if (hasThreeOfAKind && hasPair) {
+        updateRadioOption(2, 25);
+    }
+
+    updateRadioOption(5, 0);
+};
+
+const checkForStraights = (numbers) => {
+    let counter = [];
+
+    numbers.sort((a, b) => a - b);
+
+    for (let i = numbers.length - 1; i > 0; i--) {
+        const val = numbers[i] - numbers[i - 1];
+        counter.push(val);
+    }
+
+    if (counter.every(item => item === 1)) {
+        updateRadioOption(4, 40);
+        updateRadioOption(3, 30);
+    } else if (counter.slice(0, 2).every(item => item === 1) || 
+    counter.slice(1, 3).every(item => item === 1)) {
+        updateRadioOption(3, 30);
+    };
+
+    updateRadioOption(5, 0);
+};
+
 const resetGame = () => {
     listOfAllDice.forEach(item => {
         item.textContent = "0";
@@ -102,6 +139,8 @@ rollDiceBtn.addEventListener("click", () => {
     });
     updateStats();
     getHighestDuplicates(diceValuesArr);
+    detectFullHouse(diceValuesArr);
+    checkForStraights(diceValuesArr);
     //Array.from(listOfAllDice).sort((a, b) => a - b); misinterpreted the quest
 });
 
